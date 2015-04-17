@@ -25,7 +25,7 @@ a great number of features that improve the performance of
 DSP code like this. The library currently uses a significant
 percentage of the memory and processing time available to 
 the device. That said, there should be enough processing 
-power left over to do some simple visualizations.
+power left over to do some cool stuff.
 
 Of special note, by default, the implementation does not
 use overlapping FFT windows, nor does it average transforms
