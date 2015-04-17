@@ -10,6 +10,9 @@ Villanueva's excellent ADC library for Teensy3 and Teensy3.1
 Just clone/unzip to your arduino/libraries folder. Check out the 
 example for usage. 
 
+## Wiring
+I recommend using Paul's offset circuit to connect your signal to your teensy. https://github.com/PaulStoffregen/Audio/blob/master/gui/adccircuit.png
+
 ## Usage
 This library exposes an extremely simple interface for a 256
 sample FFT on the Teensy-LC platform. Simply initialize to
