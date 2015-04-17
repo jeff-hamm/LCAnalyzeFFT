@@ -64,6 +64,7 @@ LCAnalyzeFFT::LCAnalyzeFFT()  :  window(AudioWindowHanning256),	 outputflag(fals
 
 
 void bufferFull_callback() {
+
 	LCAnalyzeFFT::instance->update();
 }
 
@@ -72,7 +73,7 @@ void LCAnalyzeFFT::init(int pin) {
 #ifndef NOAVG
 	// fill the second half of the buffer in averaging mode
 	initADC(pin, bufferFull_callback, &sampleBuffer[FFT_OUTPUT_SIZE], FFT_OUTPUT_SIZE);
-	memset(prevSamples,0,sizeof(prevSamples));
+	memset(sampleBuffer,0,FFT_OUTPUT_SIZE*sizeof(uint16complex_t));
 #else
 	initADC(pin, bufferFull_callback, sampleBuffer, ANALYZE_FFT_SIZE);
 #endif
@@ -126,9 +127,6 @@ void LCAnalyzeFFT::windowFunction(const int16_t *w) {
 
 void LCAnalyzeFFT::fft()
 {
-#ifndef NOAVG
-	memcpy(sampleBuffer, prevSamples, sizeof(prevSamples));
-#endif
 	if (window) apply_window_to_fft_buffer(sampleBuffer, window);
 	arm_cfft_radix4_q15(&fft_inst, (int16_t*)sampleBuffer);
 #ifndef NOAVG
@@ -155,7 +153,7 @@ void LCAnalyzeFFT::fft()
 		}
 		outputflag = true;
 	}
-	memcpy(prevSamples, &sampleBuffer[FFT_OUTPUT_SIZE], sizeof(prevSamples));
+	memcpy(sampleBuffer, &sampleBuffer[FFT_OUTPUT_SIZE], FFT_OUTPUT_SIZE * sizeof(uint16complex_t));
 #else
 	for (int i=0; i < FFT_OUTPUT_SIZE; i++) {
 		uint16complex_t tmp = sampleBuffer[i];

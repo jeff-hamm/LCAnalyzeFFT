@@ -95,7 +95,6 @@ private:
 	int sampleDelay;
 	arm_cfft_radix4_instance_q15 fft_inst;
 #ifndef NOAVG
-	uint16complex_t prevSamples[FFT_OUTPUT_SIZE];
 	uint32_t sum[FFT_OUTPUT_SIZE];
 	uint8_t naverage;
 	uint8_t count;
