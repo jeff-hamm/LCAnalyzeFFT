@@ -19,13 +19,13 @@ The Teensy-LC has sigificantly lower memory and
 clock rate than the Teensy 3/3.1. Furthermore, it is missing
 a great number of features that improve the performance of
 DSP code like this. The library currently uses a significant
-perfentage of the memory and processing time available to 
+percentage of the memory and processing time available to 
 the device. That said, there should be enough processing 
 power left over to do some simple visualizations.
 
 Of special note, by default, the implementation does not
 use overlapping FFT windows, nor does it average transforms
-together to create a more stable form. If you would like to
+together to create a more stable signal. If you would like to
 use this feature, remove the _#define NOAVG_ symbol from
 the LCAnalyzeFFT header. Note that there will be very little
 memory remaining on the device for other features. 
