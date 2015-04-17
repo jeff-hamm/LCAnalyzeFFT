@@ -7,7 +7,7 @@ Villanueva's excellent ADC library for Teensy3 and Teensy3.1
 (https://github.com/pedvide/ADC).
 
 ## Installation
-Just unzip to your arduino/libraries folder. Check out the 
+Just clone/unzip to your arduino/libraries folder. Check out the 
 example for usage. 
 
 ## Usage
