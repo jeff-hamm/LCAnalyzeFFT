@@ -6,6 +6,10 @@ library: (https://github.com/PaulStoffregen/Audio) and Pedro
 Villanueva's excellent ADC library for Teensy3 and Teensy3.1 
 (https://github.com/pedvide/ADC).
 
+## Installation
+Just unzip to your arduino/libraries folder. Check out the 
+example for usage. 
+
 ## Usage
 This library exposes an extremely simple interface for a 256
 sample FFT on the Teensy-LC platform. Simply initialize to
