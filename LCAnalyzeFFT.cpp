@@ -70,6 +70,11 @@ void bufferFull_callback() {
 
 
 void LCAnalyzeFFT::init(int pin) {
+#ifdef SCOPE_FFT
+	pinMode(13, OUTPUT); 
+	pinMode(14, OUTPUT);
+#endif
+
 #ifndef NOAVG
 	// fill the second half of the buffer in averaging mode
 	initADC(pin, bufferFull_callback, &sampleBuffer[FFT_OUTPUT_SIZE], FFT_OUTPUT_SIZE);
@@ -82,7 +87,13 @@ void LCAnalyzeFFT::init(int pin) {
 
 void LCAnalyzeFFT::update() {
 	if(isBufferFull()) {
+#ifdef SCOPE_FFT
+		digitalWriteFast(14, HIGH);
+#endif
 		fft();
+#ifdef SCOPE_FFT
+		digitalWriteFast(14, LOW);
+#endif
 		startReading(sampleDelay);
 	}
 }

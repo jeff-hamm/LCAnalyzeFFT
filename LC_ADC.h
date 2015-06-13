@@ -38,5 +38,7 @@ bool isBufferFull();
 bool startReading(int period);
 void stopReading();
 volatile extern int bufferPosition;
+void setDCOffset(uint16_t offset);
+uint16_t getDCOffset();
 
 #endif

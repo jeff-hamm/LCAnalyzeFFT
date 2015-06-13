@@ -55,9 +55,9 @@ static uint16_t dc_average;
 static void timer0_callback();
 static void enableInterrupts();
 static void wait_for_cal();
+static void calibrateADCOffset();
 static void setConversionSpeed(uint8_t);
 static void setSamplingSpeed(uint8_t);
-static void getOffset();
 static void (*bufferFullCb)() = NULL;
 static const uint8_t channel2sc1a[] = { // new version, gives directly the sc1a number. 0x1F=31 deactivates the ADC.
 	5, 14, 8, 9, 13, 12, 6, 7, 15, 4, 0, 19, 3, 21, // 0-13, we treat them as A0-A13
@@ -86,19 +86,28 @@ void initADC(int adcPin, void (*bufferFullCallback)(), uint16complex_t * buffer,
 
 	// it can be ADC_VERY_LOW_SPEED, ADC_LOW_SPEED, ADC_MED_SPEED, ADC_HIGH_SPEED_16BITS, ADC_HIGH_SPEED or ADC_VERY_HIGH_SPEED
 	// see the documentation for more information
-	setConversionSpeed(ADC_MED_SPEED);
-	setSamplingSpeed(ADC_MED_SPEED);
-	// with 16 averages, 12 bits resolution and ADC_HIGH_SPEED conversion and sampling it takes about 32.5 us for a conversion
-	getOffset();
+	setConversionSpeed(ADC_HIGH_SPEED);
+	setSamplingSpeed(ADC_HIGH_SPEED);
+	delay(100);
+	calibrateADCOffset();
 	enableInterrupts();
 }
 
-void getOffset() { 
+void calibrateADCOffset() {
 	uint32_t sum = 0;
-	for (int i=0; i < 1024; i++) {
+	for (int i=0; i < 32767; i++) {
 		sum += analogRead(pin);
 	}
-	dc_average = sum >> 10;
+
+	setDCOffset(sum >> 15);
+
+}
+void setDCOffset(uint16_t newDcOffset) { 
+	dc_average = newDcOffset;
+}
+
+uint16_t getDCOffset() {
+	return dc_average;
 }
 
 bool startReading(int period) {
@@ -140,6 +149,9 @@ bool isBufferFull() {
 //// when the measurement finishes, this will be called
 //// first: see which pin finished and then save the measurement into the correct buffer
 void adc0_isr() {
+#ifdef SCOPE_FFT
+	digitalWriteFast(13, HIGH);
+#endif
 	if(bufferPosition == externalBufferLength) {
 		bufferPosition = 0;
 		bufferFull = true;
@@ -151,6 +163,9 @@ void adc0_isr() {
 	externalBuffer[bufferPosition].real = readSingle();
 	externalBuffer[bufferPosition].imaginary = 0;
 	bufferPosition++;
+#ifdef SCOPE_FFT
+	digitalWriteFast(13, LOW);
+#endif
 }
 
 void wait_for_cal(void)

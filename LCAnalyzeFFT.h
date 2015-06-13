@@ -35,11 +35,12 @@
 
 #define ANALYZE_FFT_SIZE 256
 #define FFT_OUTPUT_SIZE (ANALYZE_FFT_SIZE/2)
-
 // If you remove this define you will get a much higher quality FFT which uses overlapping windows
 // However, the memory and performance cost is significantly higher
-#define NOAVG
+//#define NOAVG
 
+// Use this define to profile the sampling/fft performance on pins 13 and 14.
+#define SCOPE_FFT
 extern "C" {
 	extern const int16_t AudioWindowHanning256[];
 	extern const int16_t AudioWindowBartlett256[];
@@ -87,7 +88,9 @@ public:
 #endif
 
 	static LCAnalyzeFFT * instance;
+
 private: 
+
 	void fft();
 	const int16_t *window;
 	bool outputflag;

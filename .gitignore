@@ -1,0 +1,9 @@
+*.log
+*.lastbuildstate
+*.opensdf
+*.sdf
+*.sln
+*.suo
+*.filters
+*.vsarduino.h
+*.vmps.xml
